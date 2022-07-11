@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LutieBot": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)\\"
+    }
+  }
+}
