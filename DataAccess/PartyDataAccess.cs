@@ -68,7 +68,7 @@ namespace LutieBot.DataAccess
 
             await partyMemberQuery.InsertAsync(new
             {
-                PartyId = partyId, 
+                PartyId = partyId,
                 MemberId = memberId
             });
         }

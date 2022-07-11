@@ -396,8 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-# Database file, appsettings and other files that should not be committed due to having sensitive data. 
-Lutie.db 
-appsettings.json
-appsettings.*.json

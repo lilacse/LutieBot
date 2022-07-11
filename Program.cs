@@ -6,7 +6,6 @@ using LutieBot.Core;
 using LutieBot.Core.ConfigModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace LutieBot
 {
@@ -23,13 +22,13 @@ namespace LutieBot
             string prefix = string.Empty;
             DevModeModel? devModeModel = null;
 
-            using IHost host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) => 
+            using IHost host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) =>
             {
                 config.Sources.Clear();
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
                 IConfigurationRoot configRoot = config.Build();
-                
+
                 token = configRoot.GetValue<string>("Token");
                 prefix = configRoot.GetValue<string>("Prefix");
                 devModeModel = configRoot.GetSection("DevMode").Get<DevModeModel>();
@@ -54,6 +53,6 @@ namespace LutieBot
             await lutie.ConnectAsync();
 
             await host.RunAsync();
-        }   
+        }
     }
 }

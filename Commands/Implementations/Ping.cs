@@ -18,11 +18,11 @@ namespace LutieBot.Commands.Implementations
             // Responds to a ping. 
             // Syntax: (lutie) ping
 
-            if (arguments.Count != 0) 
+            if (arguments.Count != 0)
             {
                 await client.SendMessageAsync(messageArgs.Channel, _embedUtilities.GetErrorEmbedBuilder("Unexpected number of arguments! (Expecting 0)"));
             }
-            else 
+            else
             {
                 await client.SendMessageAsync(messageArgs.Channel, _embedUtilities.GetOkEmbedBuilder("Pong!", "Lutie received a ping!"));
             }

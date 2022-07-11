@@ -15,7 +15,7 @@ namespace LutieBot.Commands
             _CommandMap = new Dictionary<string, LutieCommand>();
 
             var commandsCollection = new ServiceCollection();
-            
+
             // dependencies - message generating
             commandsCollection.AddSingleton<EmbedUtilities>();
 
