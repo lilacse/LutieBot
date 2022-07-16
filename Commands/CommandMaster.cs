@@ -1,5 +1,7 @@
+using DSharpPlus;
+using DSharpPlus.SlashCommands;
 using LutieBot.Commands.Implementations;
-using LutieBot.Commands.Utilities;
+using LutieBot.Core.ConfigModels;
 using LutieBot.Core.Utilities;
 using LutieBot.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,19 +10,39 @@ namespace LutieBot.Commands
 {
     public class CommandMaster
     {
-        private Dictionary<string, LutieCommand> _CommandMap;
-
-        public CommandMaster()
+        public void RegisterSlashCommands(DiscordClient lutie, DevModeModel? devMode)
         {
-            _CommandMap = new Dictionary<string, LutieCommand>();
+            var commands = _GetCommandClasses();
 
+            var slashCommands = lutie.UseSlashCommands(new SlashCommandsConfiguration()
+            {
+                Services = _GetCommandsServiceProvider(commands)
+            });
+
+            _RegisterCommands(slashCommands, commands, devMode);
+        }
+
+        private IEnumerable<Type> _GetCommandClasses()
+        {
+            var commandClasses = new List<Type>();
+
+            commandClasses.Add(typeof(PingCommand));
+
+            return commandClasses;
+        }
+
+        private ServiceProvider _GetCommandsServiceProvider(IEnumerable<Type> commands)
+        {
             var commandsCollection = new ServiceCollection();
+
+            // commands
+            foreach (var command in commands)
+            {
+                commandsCollection.AddSingleton(command);
+            }
 
             // dependencies - message generating
             commandsCollection.AddSingleton<EmbedUtilities>();
-
-            // dependencies - command handling
-            commandsCollection.AddSingleton<CommandUtilities>();
 
             // dependencies - data access
             commandsCollection.AddSingleton<DataAccessMaster>();
@@ -28,22 +50,28 @@ namespace LutieBot.Commands
             commandsCollection.AddSingleton<DropItemDataAccess>();
             commandsCollection.AddSingleton<BossDataAccess>();
 
-            // commands
-            commandsCollection.AddSingleton<Ping>();
-            commandsCollection.AddSingleton<PartyInfo>();
-            commandsCollection.AddSingleton<AddLoot>();
-
-            var commandsProvider = commandsCollection.BuildServiceProvider();
-
-            // add commands into the map
-            _CommandMap.Add("ping", commandsProvider.GetRequiredService<Ping>());
-            _CommandMap.Add("party-info", commandsProvider.GetRequiredService<PartyInfo>());
-            _CommandMap.Add("add-loot", commandsProvider.GetRequiredService<AddLoot>());
+            return commandsCollection.BuildServiceProvider();
         }
 
-        public Dictionary<string, LutieCommand> GetCommandMap()
+        private void _RegisterCommands(SlashCommandsExtension slashCommands, IEnumerable<Type> commands, DevModeModel? devMode)
         {
-            return _CommandMap;
+            if (devMode?.IsDevMode == true)
+            {
+                foreach (var command in commands)
+                {
+                    foreach (var serverId in devMode.DiscordServerIds)
+                    {
+                        slashCommands.RegisterCommands(command, serverId);
+                    }
+                }
+            }
+            else 
+            {
+                foreach (var command in commands)
+                {
+                    slashCommands.RegisterCommands(command);
+                }
+            }
         }
     }
 }

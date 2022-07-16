@@ -16,6 +16,12 @@ Anyways...
 4. Paste the token into the `Token` field of `appsettings.json`. Also paste your Discord user ID into the `DeveloperIDs` list in `appsettings.json` (or set `IsDevMode` to `false` to accept commands without user restrictions). 
 5. In a terminal, `cd` into the repo's folder and run `dotnet run`
 
+### Developing 
+
+For now, since the repository includes a sample database and `appsettings.json` (which the bot directly reads and writes to), it is recommended to [update your Git index](https://stackoverflow.com/questions/17195861/undo-git-update-index-assume-unchanged-file) to stop Git from tracking them on your computer. 
+
+Besides that, it is recommended to frequently backup these two files. Git will overwrite them if you do a `git reset --hard` or if you force a pull over a modified database on both sides. This behaviour will be improved in the future (hopefully!). 
+
 ### Database filling 
 
 A clean SQLite database is available from this repo when you clone it (`Lutie.db`). However, as it is "clean" (as in contains zero data), you will need to fill in certain tables in the database yourself before using most commands in the bot. Commands that can be executed through Discord messages to insert these data into the database will be implemented in the future, but for now, it is what it is. 
@@ -26,22 +32,31 @@ You can use any database client that can interact with SQLite databases to do th
 
 A list of commands that are planned to be supported by the bot. This list is likely going to change in the future. 
 
-| Command      	| Implementation Progress 	|
-|--------------	|-------------------------	|
-| ping         	| ✓                       	|
-| add-party    	|                         	|
-| remove-party 	|                         	|
-| edit-party   	|                         	|
-| party-info   	|WIP                       	|
-| register     	|                         	|
-| unregister   	|                         	|
-| add-loot     	|WIP                       	|
-| remove-loot  	|                         	|
-| edit-loot    	|                         	|
-| sell-loot    	|                         	|
-| loot-info    	|                         	|
-| mark-claimed 	|                         	|
-|              	|                         	|
+(some progress got reseted because they are going to be rewritten in slash commands.)
+
+| Command       	| Implementation Progress 	|
+|------------------ |-------------------------	|
+| ping           	| ✓                       	|
+| new-party     	|                         	|
+| delete-party  	|                         	|
+| edit-party    	|                         	|
+| party-info    	|                         	|
+| register       	|                         	|
+| unregister   	    |                         	|
+| edit-profile      |                           |
+| new-boss          |                           |
+| delete-boss       |                           |
+| edit-boss         |                           |
+| new-drop-item     |                           |
+| delete-drop-item  |                           |
+| edit-drop-item    |                           |
+| add-drop      	|                       	|
+| remove-drop   	|                         	|
+| edit-drop     	|                         	|
+| sell-drop     	|                         	|
+| get-drops     	|                         	|
+| mark-claimed     	|                         	|
+|               	|                         	|
 
 ### Documentation 
 

@@ -2,7 +2,7 @@
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
-using LutieBot.Core;
+using LutieBot.Commands;
 using LutieBot.Core.ConfigModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -19,8 +19,7 @@ namespace LutieBot
         static async Task MainAsync()
         {
             string token = string.Empty;
-            string prefix = string.Empty;
-            DevModeModel? devModeModel = null;
+            DevModeModel? devMode = null;
 
             using IHost host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) =>
             {
@@ -30,8 +29,7 @@ namespace LutieBot
                 IConfigurationRoot configRoot = config.Build();
 
                 token = configRoot.GetValue<string>("Token");
-                prefix = configRoot.GetValue<string>("Prefix");
-                devModeModel = configRoot.GetSection("DevMode").Get<DevModeModel>();
+                devMode = configRoot.GetSection("DevMode").Get<DevModeModel>();
             }).Build();
 
             var lutie = new DiscordClient(new DiscordConfiguration()
@@ -41,14 +39,13 @@ namespace LutieBot
                 Intents = DiscordIntents.DirectMessages | DiscordIntents.GuildMessages | DiscordIntents.GuildMessageReactions,
             });
 
-            var commandHandler = new CommandHandler(prefix, devModeModel);
-            lutie.MessageCreated += commandHandler.ConsumeCommand;
-
             lutie.UseInteractivity(new InteractivityConfiguration()
             {
                 PollBehaviour = PollBehaviour.KeepEmojis,
                 Timeout = TimeSpan.FromSeconds(30)
             });
+
+            new CommandMaster().RegisterSlashCommands(lutie, devMode);
 
             await lutie.ConnectAsync();
 

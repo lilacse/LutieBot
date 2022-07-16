@@ -3,6 +3,6 @@
     public class DevModeModel
     {
         public bool IsDevMode { get; set; } = false;
-        public List<ulong> DeveloperIds { get; set; } = new List<ulong>();
+        public List<ulong> DiscordServerIds { get; set; } = new List<ulong>();
     }
 }
