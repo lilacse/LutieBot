@@ -13,7 +13,7 @@ Anyways...
 1. Get the [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download).
 2. Create a bot application under your Discord account in the [Discord Developers Portal](https://discord.com/developers/docs/intro). Invite the bot into your own server and copy the token.
 3. Clone this repo. 
-4. Paste the token into the `Token` field of `appsettings.json`. Also paste your Discord user ID into the `DeveloperIDs` list in `appsettings.json` (or set `IsDevMode` to `false` to accept commands without user restrictions). 
+4. Paste the token into the `Token` field of `appsettings.json`. Also paste your Discord server ID into the `DiscordServerIDs` list in `appsettings.json` (or set `IsDevMode` to `false` to register commands globally). 
 5. In a terminal, `cd` into the repo's folder and run `dotnet run`
 
 ### Developing 
