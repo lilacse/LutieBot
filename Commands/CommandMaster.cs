@@ -1,8 +1,8 @@
 using DSharpPlus;
 using DSharpPlus.SlashCommands;
 using LutieBot.Commands.Implementations;
-using LutieBot.Core.ConfigModels;
-using LutieBot.Core.Utilities;
+using LutieBot.ConfigModels;
+using LutieBot.Utilities;
 using LutieBot.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +27,7 @@ namespace LutieBot.Commands
             var commandClasses = new List<Type>();
 
             commandClasses.Add(typeof(PingCommand));
+            commandClasses.Add(typeof(NewDropItemCommand));
 
             return commandClasses;
         }
@@ -46,9 +47,7 @@ namespace LutieBot.Commands
 
             // dependencies - data access
             commandsCollection.AddSingleton<DataAccessMaster>();
-            commandsCollection.AddSingleton<PartyDataAccess>();
             commandsCollection.AddSingleton<DropItemDataAccess>();
-            commandsCollection.AddSingleton<BossDataAccess>();
 
             return commandsCollection.BuildServiceProvider();
         }

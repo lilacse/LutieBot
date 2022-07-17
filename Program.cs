@@ -3,7 +3,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using LutieBot.Commands;
-using LutieBot.Core.ConfigModels;
+using LutieBot.ConfigModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -35,8 +35,7 @@ namespace LutieBot
             var lutie = new DiscordClient(new DiscordConfiguration()
             {
                 Token = token,
-                TokenType = TokenType.Bot,
-                Intents = DiscordIntents.DirectMessages | DiscordIntents.GuildMessages | DiscordIntents.GuildMessageReactions,
+                TokenType = TokenType.Bot
             });
 
             lutie.UseInteractivity(new InteractivityConfiguration()

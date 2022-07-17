@@ -1,7 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using LutieBot.Core.Utilities;
+using LutieBot.Utilities;
 
 namespace LutieBot.Commands.Implementations
 {

@@ -1,4 +1,4 @@
-﻿namespace LutieBot.Core.ConfigModels
+﻿namespace LutieBot.ConfigModels
 {
     public class DevModeModel
     {

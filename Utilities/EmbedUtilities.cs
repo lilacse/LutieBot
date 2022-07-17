@@ -1,6 +1,6 @@
 using DSharpPlus.Entities;
 
-namespace LutieBot.Core.Utilities
+namespace LutieBot.Utilities
 {
     public class EmbedUtilities
     {
