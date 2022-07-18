@@ -25,7 +25,7 @@ namespace LutieBot.Commands.Implementations
         {
             try
             {
-                IEnumerable<string> abbreviationList = abbreviations == null ? Enumerable.Empty<string>() : abbreviations.Split(',').Select(abbr => abbr.Trim().ToLower());
+                IEnumerable<string> abbreviationList = abbreviations == null ? Enumerable.Empty<string>() : abbreviations.Split(',').Select(abbr => abbr.Trim().ToLower()).Distinct();
 
                 await _dropItemDataAccess.AddDropItem(itemName, abbreviationList, context.Guild.Id);
 

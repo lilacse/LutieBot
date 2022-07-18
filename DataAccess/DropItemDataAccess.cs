@@ -18,9 +18,11 @@ namespace LutieBot.DataAccess
         public async Task<int> GetDropItemId(string itemName, ulong discordServerId)
         {
             return await _db.Query("DropItem")
-                            .Select("Id")
-                            .WhereLike("Name", itemName)
-                            .Where("DiscordServerId", discordServerId)
+                            .LeftJoin("DropItemAbbreviation", "DropItem.Id", "DropItemAbbreviation.DropItemId")
+                            .Select("DropItem.Id")
+                            .WhereLike("DropItem.Name", itemName)
+                            .OrWhereLike("DropItemAbbreviation.Abbreviation", itemName)
+                            .Where("DropItem.DiscordServerId", discordServerId)
                             .FirstOrDefaultAsync<int>();
         }
 
@@ -28,7 +30,15 @@ namespace LutieBot.DataAccess
         {
             if (await GetDropItemId(itemName, discordServerId) != 0)
             {
-                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"The drop item \"{itemName}\" already exists!"));
+                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"The drop item with identifier \"{itemName}\" already exists!"));
+            }
+
+            foreach (string abbr in abbreviations)
+            {
+                if (await GetDropItemId(abbr, discordServerId) != 0)
+                {
+                    throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"The abbreviation \"{abbr}\" already refers to an existing item!"));
+                }
             }
 
             var dropItemQuery = _db.Query("DropItem");
