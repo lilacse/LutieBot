@@ -38,7 +38,7 @@ namespace LutieBot.DataAccess
         {
             if (await GetMemberId(memberDiscordId, discordServerId) != 0)
             {
-                throw new UserActionException(_embedUtilities.GetInfoEmbedBuilder("Oops!", "You are already registered!"));
+                throw new UserActionException(_embedUtilities.GetInfoEmbedBuilder("Oops!", "This user is already registered!"));
             }
 
             if (await GetMemberId(ign, discordServerId) != 0)

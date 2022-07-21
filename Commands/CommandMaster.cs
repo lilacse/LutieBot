@@ -29,6 +29,7 @@ namespace LutieBot.Commands
             commandClasses.Add(typeof(PingCommand));
             commandClasses.Add(typeof(NewDropItemCommand));
             commandClasses.Add(typeof(RegisterCommand));
+            commandClasses.Add(typeof(RegisterMemberCommand));
 
             return commandClasses;
         }
