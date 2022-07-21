@@ -22,12 +22,6 @@ For now, since the repository includes a sample database and `appsettings.json` 
 
 Besides that, it is recommended to frequently backup these two files. Git will overwrite them if you do a `git reset --hard` or if you force a pull over a modified database on both sides. This behaviour will be improved in the future (hopefully!). 
 
-### Database filling 
-
-A clean SQLite database is available from this repo when you clone it (`Lutie.db`). However, as it is "clean" (as in contains zero data), you will need to fill in certain tables in the database yourself before using most commands in the bot. Commands that can be executed through Discord messages to insert these data into the database will be implemented in the future, but for now, it is what it is. 
-
-You can use any database client that can interact with SQLite databases to do the job, such as [DBeaver](https://dbeaver.io/).
-
 ### Feature plans
 
 A list of commands that are planned to be supported by the bot. This list is likely going to change in the future. 
@@ -47,7 +41,7 @@ A list of commands that are planned to be supported by the bot. This list is lik
 | new-boss          |                           |
 | delete-boss       |                           |
 | edit-boss         |                           |
-| new-drop-item     |                           |
+| new-drop-item     | ✓                         |
 | delete-drop-item  |                           |
 | edit-drop-item    |                           |
 | add-drop      	|                       	|
