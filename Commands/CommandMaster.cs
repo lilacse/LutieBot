@@ -28,6 +28,7 @@ namespace LutieBot.Commands
 
             commandClasses.Add(typeof(PingCommand));
             commandClasses.Add(typeof(NewDropItemCommand));
+            commandClasses.Add(typeof(RegisterCommand));
 
             return commandClasses;
         }
@@ -48,6 +49,7 @@ namespace LutieBot.Commands
             // dependencies - data access
             commandsCollection.AddSingleton<DataAccessMaster>();
             commandsCollection.AddSingleton<DropItemDataAccess>();
+            commandsCollection.AddSingleton<MemberDataAccess>();
 
             return commandsCollection.BuildServiceProvider();
         }

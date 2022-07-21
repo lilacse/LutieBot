@@ -35,7 +35,8 @@ A list of commands that are planned to be supported by the bot. This list is lik
 | delete-party  	|                         	|
 | edit-party    	|                         	|
 | party-info    	|                         	|
-| register       	|                         	|
+| register       	| ✓                        	|
+| register-member   |                           |
 | unregister   	    |                         	|
 | edit-profile      |                           |
 | new-boss          |                           |
