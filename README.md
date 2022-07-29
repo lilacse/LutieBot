@@ -34,22 +34,26 @@ A list of commands that are planned to be supported by the bot. This list is lik
 | new-party     	|                         	|
 | delete-party  	|                         	|
 | edit-party    	|                         	|
-| party-info    	|                         	|
+| get-party     	|                         	|
 | register       	| ✓                        	|
-| register-member   |                           |
+| register-member   | ✓                         |
 | unregister   	    |                         	|
+| unregister-member |                           |
+| get-profile       |                           |
 | edit-profile      |                           |
-| new-boss          |                           |
+| new-boss          | ✓                         |
 | delete-boss       |                           |
 | edit-boss         |                           |
+| get-boss          |                           |
 | new-drop-item     | ✓                         |
 | delete-drop-item  |                           |
 | edit-drop-item    |                           |
+| get-drop-item     |                           |
 | add-drop      	|                       	|
 | remove-drop   	|                         	|
 | edit-drop     	|                         	|
-| sell-drop     	|                         	|
 | get-drops     	|                         	|
+| sell-drop     	|                         	|
 | mark-claimed     	|                         	|
 |               	|                         	|
 

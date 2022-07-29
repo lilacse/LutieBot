@@ -30,6 +30,7 @@ namespace LutieBot.Commands
             commandClasses.Add(typeof(NewDropItemCommand));
             commandClasses.Add(typeof(RegisterCommand));
             commandClasses.Add(typeof(RegisterMemberCommand));
+            commandClasses.Add(typeof(NewBossCommand));
 
             return commandClasses;
         }
@@ -51,6 +52,7 @@ namespace LutieBot.Commands
             commandsCollection.AddSingleton<DataAccessMaster>();
             commandsCollection.AddSingleton<DropItemDataAccess>();
             commandsCollection.AddSingleton<MemberDataAccess>();
+            commandsCollection.AddSingleton<BossDataAccess>();
 
             return commandsCollection.BuildServiceProvider();
         }
