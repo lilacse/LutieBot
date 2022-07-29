@@ -20,17 +20,17 @@ namespace LutieBot.Commands.Implementations
 
         [SlashCommand("new-drop-item", "Registers a new drop item.")]
         public async Task NewDropItem(InteractionContext context,
-            [Option("item-name", "The name of the item.")] string itemName,
+            [Option("name", "The name of the item.")] string name,
             [Option("abbreviations", "Comma-separated list of abbreviations for the item.")] string? abbreviations = null)
         {
             try
             {
                 IEnumerable<string> abbreviationList = abbreviations == null ? Enumerable.Empty<string>() : abbreviations.Split(',').Select(abbr => abbr.Trim().ToLower()).Distinct();
 
-                await _dropItemDataAccess.AddDropItem(itemName, abbreviationList, context.Guild.Id);
+                await _dropItemDataAccess.AddDropItem(name, abbreviationList, context.Guild.Id);
 
                 var responseEmbed = _embedUtilities.GetOkEmbedBuilder("Item Added", "The item is successfully added.");
-                responseEmbed.AddField("Item name", itemName);
+                responseEmbed.AddField("Name", name);
                 
                 if (abbreviationList.Any())
                 {
