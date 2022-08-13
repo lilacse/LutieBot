@@ -4,7 +4,10 @@ using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using LutieBot.Commands;
 using LutieBot.ConfigModels;
+using LutieBot.DataAccess;
+using LutieBot.Utilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace LutieBot
@@ -19,6 +22,7 @@ namespace LutieBot
         static async Task MainAsync()
         {
             string token = string.Empty;
+            string? connectionString = null;
             DevModeModel? devMode = null;
 
             using IHost host = Host.CreateDefaultBuilder().ConfigureAppConfiguration((context, config) =>
@@ -29,6 +33,7 @@ namespace LutieBot
                 IConfigurationRoot configRoot = config.Build();
 
                 token = configRoot.GetValue<string>("Token");
+                connectionString = configRoot.GetValue<string>("ConnectionString");
                 devMode = configRoot.GetSection("DevMode").Get<DevModeModel>();
             }).Build();
 
@@ -44,7 +49,13 @@ namespace LutieBot
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            new CommandMaster().RegisterSlashCommands(lutie, devMode);
+            var serviceCollection = new ServiceCollection();
+            
+            new UtilitiesMaster().RegisterUtilitiesProvider(serviceCollection);
+
+            new DataAccessMaster(connectionString).RegisterDataAccessProviders(serviceCollection);
+
+            new CommandMaster().RegisterSlashCommands(lutie, serviceCollection, devMode);
 
             await lutie.ConnectAsync();
 

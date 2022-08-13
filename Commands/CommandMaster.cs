@@ -2,21 +2,24 @@ using DSharpPlus;
 using DSharpPlus.SlashCommands;
 using LutieBot.Commands.Implementations;
 using LutieBot.ConfigModels;
-using LutieBot.Utilities;
-using LutieBot.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LutieBot.Commands
 {
     public class CommandMaster
     {
-        public void RegisterSlashCommands(DiscordClient lutie, DevModeModel? devMode)
+        public void RegisterSlashCommands(DiscordClient lutie, ServiceCollection serviceCollection, DevModeModel? devMode)
         {
             var commands = _GetCommandClasses();
 
+            foreach (var command in commands) 
+            {
+                serviceCollection.AddSingleton(command);
+            }
+
             var slashCommands = lutie.UseSlashCommands(new SlashCommandsConfiguration()
             {
-                Services = _GetCommandsServiceProvider(commands)
+                Services = serviceCollection.BuildServiceProvider()
             });
 
             _RegisterCommands(slashCommands, commands, devMode);
@@ -33,28 +36,6 @@ namespace LutieBot.Commands
             commandClasses.Add(typeof(NewBossCommand));
 
             return commandClasses;
-        }
-
-        private ServiceProvider _GetCommandsServiceProvider(IEnumerable<Type> commands)
-        {
-            var commandsCollection = new ServiceCollection();
-
-            // commands
-            foreach (var command in commands)
-            {
-                commandsCollection.AddSingleton(command);
-            }
-
-            // dependencies - message generating
-            commandsCollection.AddSingleton<EmbedUtilities>();
-
-            // dependencies - data access
-            commandsCollection.AddSingleton<DataAccessMaster>();
-            commandsCollection.AddSingleton<DropItemDataAccess>();
-            commandsCollection.AddSingleton<MemberDataAccess>();
-            commandsCollection.AddSingleton<BossDataAccess>();
-
-            return commandsCollection.BuildServiceProvider();
         }
 
         private void _RegisterCommands(SlashCommandsExtension slashCommands, IEnumerable<Type> commands, DevModeModel? devMode)

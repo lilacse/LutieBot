@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
 using SqlKata.Compilers;
 using SqlKata.Execution;
 
@@ -10,9 +11,9 @@ namespace LutieBot.DataAccess
         private readonly SqliteCompiler _compiler;
         private readonly QueryFactory _db;
 
-        public DataAccessMaster()
+        public DataAccessMaster(string? connectionString = null)
         {
-            _connection = new SqliteConnection("Data Source=Lutie.db");
+            _connection = new SqliteConnection(connectionString ?? "Data Source=Lutie.db");
             _compiler = new SqliteCompiler();
             _db = new QueryFactory(_connection, _compiler);
         }
@@ -30,6 +31,15 @@ namespace LutieBot.DataAccess
         public QueryFactory GetQueryFactory()
         {
             return _db;
+        }
+
+        public void RegisterDataAccessProviders(ServiceCollection collection)
+        {
+            collection.AddSingleton(typeof(DataAccessMaster), this);
+
+            collection.AddSingleton<DropItemDataAccess>();
+            collection.AddSingleton<MemberDataAccess>();
+            collection.AddSingleton<BossDataAccess>();
         }
     }
 }
