@@ -5,6 +5,7 @@ using DSharpPlus.Interactivity.Extensions;
 using LutieBot.Commands;
 using LutieBot.ConfigModels;
 using LutieBot.DataAccess;
+using LutieBot.DatabaseMigrations;
 using LutieBot.Utilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,8 @@ namespace LutieBot
 
         static async Task MainAsync()
         {
+            Console.WriteLine("Starting LutieBot...");
+
             string token = string.Empty;
             string? connectionString = null;
             DevModeModel? devMode = null;
@@ -49,12 +52,24 @@ namespace LutieBot
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
+            var dataAccessMaster = new DataAccessMaster(connectionString);
+
+            try
+            {
+                await new DatabaseMigrator(dataAccessMaster).MigrateLatest();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occured when migrating database: {ex.Message}");
+                Console.WriteLine("LutieBot will exit now.");
+
+                Environment.Exit(1);
+            }
+
             var serviceCollection = new ServiceCollection();
-            
+
             new UtilitiesMaster().RegisterUtilitiesProvider(serviceCollection);
-
-            new DataAccessMaster(connectionString).RegisterDataAccessProviders(serviceCollection);
-
+            dataAccessMaster.RegisterDataAccessProviders(serviceCollection);
             new CommandMaster().RegisterSlashCommands(lutie, serviceCollection, devMode);
 
             await lutie.ConnectAsync();
