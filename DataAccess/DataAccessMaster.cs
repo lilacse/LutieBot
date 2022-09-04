@@ -40,6 +40,7 @@ namespace LutieBot.DataAccess
             collection.AddSingleton<DropItemDataAccess>();
             collection.AddSingleton<MemberDataAccess>();
             collection.AddSingleton<BossDataAccess>();
+            collection.AddSingleton<PartyDataAccess>();
         }
     }
 }

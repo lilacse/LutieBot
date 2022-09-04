@@ -25,10 +25,10 @@ A list of commands that are planned to be supported by the bot. This list is lik
 | Command       	| Implementation Progress 	|
 |------------------ |-------------------------	|
 | ping           	| ✓                       	|
-| new-party     	|                         	|
+| new-party     	| ✓                        	|
 | delete-party  	|                         	|
 | edit-party    	|                         	|
-| get-party     	|                         	|
+| get-party     	| ✓                        	|
 | register       	| ✓                        	|
 | register-member   | ✓                         |
 | unregister   	    |                         	|

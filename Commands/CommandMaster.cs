@@ -12,7 +12,7 @@ namespace LutieBot.Commands
         {
             var commands = _GetCommandClasses();
 
-            foreach (var command in commands) 
+            foreach (var command in commands)
             {
                 serviceCollection.AddSingleton(command);
             }
@@ -34,6 +34,8 @@ namespace LutieBot.Commands
             commandClasses.Add(typeof(RegisterCommand));
             commandClasses.Add(typeof(RegisterMemberCommand));
             commandClasses.Add(typeof(NewBossCommand));
+            commandClasses.Add(typeof(NewPartyCommand));
+            commandClasses.Add(typeof(GetPartyCommand));
 
             return commandClasses;
         }
@@ -50,7 +52,7 @@ namespace LutieBot.Commands
                     }
                 }
             }
-            else 
+            else
             {
                 foreach (var command in commands)
                 {

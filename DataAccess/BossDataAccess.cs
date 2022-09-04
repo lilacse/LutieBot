@@ -4,7 +4,7 @@ using SqlKata.Execution;
 
 namespace LutieBot.DataAccess
 {
-    public class BossDataAccess 
+    public class BossDataAccess
     {
         private readonly QueryFactory _db;
         private readonly EmbedUtilities _embedUtilities;
@@ -54,13 +54,42 @@ namespace LutieBot.DataAccess
                             .FirstOrDefaultAsync<int>();
         }
 
+        public async Task<int> GetRequiredBossDifficultyId(string name, string difficulty, ulong discordServerId)
+        {
+            if (await GetBossId(name, discordServerId) == 0)
+            {
+                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"Boss '{name}' is not registered!"));
+            }
+
+            int bossDifficultyId = await GetBossDifficultyId(name, difficulty, discordServerId);
+
+            if (bossDifficultyId == 0)
+            {
+                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"Difficulty '{difficulty}' for boss '{name}' is not registered!"));
+            }
+
+            return bossDifficultyId;
+        }
+
+        public async Task<int> GetRequiredBossDifficultyId(string abbreviation, ulong discordServerId)
+        {
+            int bossDifficultyId = await GetBossDifficultyId(abbreviation, discordServerId);
+
+            if (bossDifficultyId == 0)
+            {
+                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"Boss '{abbreviation}' is not registered!"));
+            }
+
+            return bossDifficultyId;
+        }
+
         public async Task<int> InsertBoss(string name, ulong discordServerId)
         {
             var bossQuery = _db.Query("Boss");
 
-            return await bossQuery.InsertGetIdAsync<int>(new 
+            return await bossQuery.InsertGetIdAsync<int>(new
             {
-                Name = name, 
+                Name = name,
                 DiscordServerId = discordServerId,
             });
         }
@@ -69,9 +98,9 @@ namespace LutieBot.DataAccess
         {
             var bossDifficultyQuery = _db.Query("BossDifficulty");
 
-            int bossDifficultyId = await bossDifficultyQuery.InsertGetIdAsync<int>(new 
+            int bossDifficultyId = await bossDifficultyQuery.InsertGetIdAsync<int>(new
             {
-                BossId = bossId, 
+                BossId = bossId,
                 Difficulty = difficulty,
             });
 
@@ -79,9 +108,9 @@ namespace LutieBot.DataAccess
 
             foreach (string abbr in abbreviations)
             {
-                await bossDifficultyAbbreviationQuery.InsertAsync(new 
+                await bossDifficultyAbbreviationQuery.InsertAsync(new
                 {
-                    BossDifficultyId = bossDifficultyId, 
+                    BossDifficultyId = bossDifficultyId,
                     Abbreviation = abbr,
                 });
             }
@@ -107,12 +136,12 @@ namespace LutieBot.DataAccess
                 {
                     throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"Boss \"{name}\" already has a difficulty that matches \"{difficulty}\"!"));
                 }
-                else 
+                else
                 {
                     await InsertBossDifficulty(bossId, difficulty, abbreviations);
                 }
             }
-            else 
+            else
             {
                 await InsertBossDifficulty(await InsertBoss(name, discordServerId), difficulty, abbreviations);
             }
