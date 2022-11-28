@@ -26,6 +26,24 @@ namespace LutieBot.DataAccess
                             .FirstOrDefaultAsync<int>();
         }
 
+        public async Task<int> GetRequiredDropItemId(string itemName, ulong discordServerId)
+        {
+            int dropItemId = await _db.Query("DropItem")
+                                      .LeftJoin("DropItemAbbreviation", "DropItem.Id", "DropItemAbbreviation.DropItemId")
+                                      .Select("DropItem.Id")
+                                      .WhereLike("DropItem.Name", itemName)
+                                      .OrWhereLike("DropItemAbbreviation.Abbreviation", itemName)
+                                      .Where("DropItem.DiscordServerId", discordServerId)
+                                      .FirstOrDefaultAsync<int>();
+
+            if (dropItemId == 0)
+            {
+                throw new UserActionException(_embedUtilities.GetErrorEmbedBuilder($"No matching items found!"));
+            }
+
+            return dropItemId;
+        }
+
         public async Task AddDropItem(string itemName, IEnumerable<string> abbreviations, ulong discordServerId)
         {
             if (await GetDropItemId(itemName, discordServerId) != 0)
@@ -45,7 +63,7 @@ namespace LutieBot.DataAccess
 
             int dropItemId = await dropItemQuery.InsertGetIdAsync<int>(new
             {
-                Name = itemName, 
+                Name = itemName,
                 DiscordServerId = discordServerId
             });
 
@@ -54,7 +72,7 @@ namespace LutieBot.DataAccess
             {
                 await dropItemAbbreviationQuery.InsertAsync(new
                 {
-                    DropItemId = dropItemId, 
+                    DropItemId = dropItemId,
                     Abbreviation = abbr
                 });
             }

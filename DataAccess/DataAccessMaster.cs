@@ -41,6 +41,7 @@ namespace LutieBot.DataAccess
             collection.AddSingleton<MemberDataAccess>();
             collection.AddSingleton<BossDataAccess>();
             collection.AddSingleton<PartyDataAccess>();
+            collection.AddSingleton<DropDataAccess>();
         }
     }
 }

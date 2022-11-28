@@ -125,7 +125,7 @@ namespace LutieBot.DataAccess
                 throw new UserActionException(errorEmbed);
             }
 
-            return userParties.First().Id;
+            return Convert.ToInt32(userParties.First().Id);
         }
 
         public async Task<int> GetUserPartyId(ulong discordUserId, string bossAbbreviation, ulong discordServerId)
@@ -144,14 +144,14 @@ namespace LutieBot.DataAccess
                 throw new UserActionException(errorEmbed);
             }
 
-            return userParties.First().Id;
+            return Convert.ToInt32(userParties.First().Id);
         }
 
         public async Task<int> GetPartyId(string partyName, ulong discordServerId)
         {
             return await _db.Query("Party")
                             .Select("Party.Id")
-                            .Where("Party.Name", partyName)
+                            .WhereLike("Party.Name", partyName)
                             .Where("Party.DiscordServerId", discordServerId)
                             .FirstOrDefaultAsync<int>();
         }
@@ -161,9 +161,23 @@ namespace LutieBot.DataAccess
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<int>> GetPartyMemberIds(string partyName, ulong discordServerId)
+        public async Task<IEnumerable<int>> GetMemberIds(string partyName, ulong discordServerId)
         {
-            throw new NotImplementedException();
+            return await _db.Query("PartyMember")
+                            .Select("PartyMember.MemberId")
+                            .LeftJoin("Party", "Party.Id", "PartyMember.PartyId")
+                            .WhereLike("Party.Name", partyName)
+                            .Where("Party.DiscordServerId", discordServerId)
+                            .GetAsync<int>();
+        }
+
+        public async Task<IEnumerable<int>> GetMemberIds(int partyId)
+        {
+            return await _db.Query("PartyMember")
+                            .Select("PartyMember.MemberId")
+                            .LeftJoin("Party", "Party.Id", "PartyMember.PartyId")
+                            .Where("Party.Id", partyId)
+                            .GetAsync<int>();
         }
 
         public async Task<int> InsertParty(string name, IEnumerable<string> igns, int bossDifficultyId, ulong discordServerId)

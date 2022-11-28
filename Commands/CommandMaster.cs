@@ -36,6 +36,7 @@ namespace LutieBot.Commands
             commandClasses.Add(typeof(NewBossCommand));
             commandClasses.Add(typeof(NewPartyCommand));
             commandClasses.Add(typeof(GetPartyCommand));
+            commandClasses.Add(typeof(AddDropCommand));
 
             return commandClasses;
         }

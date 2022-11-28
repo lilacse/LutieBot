@@ -43,7 +43,7 @@ A list of commands that are planned to be supported by the bot. This list is lik
 | delete-drop-item  |                           |
 | edit-drop-item    |                           |
 | get-drop-item     |                           |
-| add-drop      	|                       	|
+| add-drop      	| ✓                      	|
 | remove-drop   	|                         	|
 | edit-drop     	|                         	|
 | get-drops     	|                         	|
