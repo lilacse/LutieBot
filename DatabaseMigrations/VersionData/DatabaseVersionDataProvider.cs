@@ -347,11 +347,9 @@
                         CREATE TABLE PartyDropRecord (
 	                        Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	                        ItemId INTEGER NOT NULL,
-	                        BossDifficultyId INTEGER NOT NULL,
 	                        PartyId INTEGER NOT NULL,
 	                        ""Timestamp"" TEXT NOT NULL,
                             CONSTRAINT PartyDropRecord_FK FOREIGN KEY (ItemId) REFERENCES DropItem(Id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-                            CONSTRAINT PartyDropRecord_FK_1 FOREIGN KEY (BossDifficultyId) REFERENCES BossDifficulty(Id) ON DELETE RESTRICT ON UPDATE RESTRICT,
                             CONSTRAINT PartyDropRecord_FK_2 FOREIGN KEY (PartyId) REFERENCES Party(Id) ON DELETE RESTRICT ON UPDATE RESTRICT);
 
                         CREATE TABLE PartyDropSplit (
