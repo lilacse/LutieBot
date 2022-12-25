@@ -24,21 +24,24 @@ namespace LutieBot.Commands.Implementations
             [Option("boss-name", "The name of the boss (e.g. Lucid).")] string? bossName = null,
             [Option("boss-difficulty", "The difficulty of the boss")] string? bossDifficulty = null,
             [Option("boss-abbreviation", "The abbreviation of the boss (e.g. hcid)")] string? bossAbbreviation = null,
-            [Option("party-name", "The abbreviation of the boss (e.g. hcid)")] string? partyName = null)
+            [Option("party-name", "The abbreviation of the boss (e.g. hcid)")] string? partyName = null,
+            [Option("exclude", "Comma-separated list of members from the party to exclude from this drop")] string? excludes = null)
         {
             try
             {
+                IEnumerable<string> excludeList = excludes?.Split(',').Select(memberName => memberName.Trim()) ?? Enumerable.Empty<string>();
+
                 if (!string.IsNullOrEmpty(bossName) && !string.IsNullOrEmpty(bossDifficulty) && string.IsNullOrEmpty(bossAbbreviation) && string.IsNullOrEmpty(partyName))
                 {
-                    await _dropDataAccess.AddDrop(item, bossName, bossDifficulty, context.Guild.Id, context.Member.Id);
+                    await _dropDataAccess.AddDrop(item, bossName, bossDifficulty, context.Guild.Id, context.Member.Id, excludeList);
                 }
                 else if (string.IsNullOrEmpty(bossName) && string.IsNullOrEmpty(bossDifficulty) && !string.IsNullOrEmpty(bossAbbreviation) && string.IsNullOrEmpty(partyName))
                 {
-                    await _dropDataAccess.AddDrop(item, bossAbbreviation, context.Guild.Id, context.Member.Id);
+                    await _dropDataAccess.AddDrop(item, bossAbbreviation, context.Guild.Id, context.Member.Id, excludeList);
                 }
                 else if (string.IsNullOrEmpty(bossName) && string.IsNullOrEmpty(bossDifficulty) && string.IsNullOrEmpty(bossAbbreviation) && !string.IsNullOrEmpty(partyName))
                 {
-                    await _dropDataAccess.AddDrop(item, partyName, context.Guild.Id);
+                    await _dropDataAccess.AddDrop(item, partyName, context.Guild.Id, excludeList);
                 }
                 else
                 {
@@ -65,6 +68,10 @@ namespace LutieBot.Commands.Implementations
                 if (!string.IsNullOrEmpty(partyName))
                 {
                     responseEmbed.AddField("Party Name", partyName);
+                }
+                if (!string.IsNullOrEmpty(excludes))
+                {
+                    responseEmbed.AddField("Excluded", string.Join(", ", excludeList));
                 }
 
                 await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().AddEmbed(responseEmbed));
